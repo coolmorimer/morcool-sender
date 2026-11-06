@@ -1,0 +1,1 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="ru.morcool.sender.tests"><uses-sdk android:minSdkVersion="23" android:targetSdkVersion="36"/><application android:label="Sender isolated checks"/><instrumentation android:name="ru.morcool.sender.NextTests" android:targetPackage="ru.morcool.sender" android:label="Sender checks"/></manifest>

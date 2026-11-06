@@ -1,0 +1,40 @@
+name: Build and core checks
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-java@v6.2.0
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Install Android build packages
+        shell: pwsh
+        run: |
+          if (!$env:ANDROID_SDK_ROOT) { $env:ANDROID_SDK_ROOT = $env:ANDROID_HOME }
+          & "$env:ANDROID_SDK_ROOT\cmdline-tools\latest\bin\sdkmanager.bat" 'platforms;android-36' 'build-tools;36.0.0'
+          if ($LASTEXITCODE) { throw 'Android SDK installation failed' }
+      - name: Core checks
+        shell: pwsh
+        run: ./Test-Core.ps1
+      - name: Build isolated QA APK
+        shell: pwsh
+        run: ./Build.ps1 -Qa
+      - name: Build production preview APK
+        shell: pwsh
+        run: ./Build.ps1
+      - uses: actions/upload-artifact@v7.0.2
+        with:
+          name: morcool-sender-preview
+          path: |
+            Morcool-Sender-Next.apk
+            Morcool-Sender-Next-QA.apk
+          retention-days: 14

@@ -1,0 +1,4 @@
+<network-security-config>
+  <base-config cleartextTrafficPermitted="false"><trust-anchors><certificates src="system"/></trust-anchors></base-config>
+  <domain-config cleartextTrafficPermitted="false"><domain>platform-api2.max.ru</domain><domain>web.max.ru</domain><trust-anchors><certificates src="system"/><certificates src="@raw/max_root"/></trust-anchors></domain-config>
+</network-security-config>
